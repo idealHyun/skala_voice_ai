@@ -1,0 +1,95 @@
+name: mono-repo-deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [closed]
+
+env:
+  EC2_HOST: ${{ secrets.EC2_HOST }}
+  EC2_USER: ${{ secrets.EC2_USER }}
+  EC2_KEY:  ${{ secrets.EC2_SSH_KEY }}
+  DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
+
+jobs:
+
+  deploy-backend:
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect backend changes
+        id: backend-changes
+        run: |
+          files=$(git diff --name-only ${{ github.event.before || 'HEAD~1' }} $GITHUB_SHA)
+          echo "changed=$(echo "$files" | grep '^backend/' || true)" >> $GITHUB_OUTPUT
+
+      - name: Log in to Docker Hub
+        if: steps.backend-changes.outputs.changed != ''
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ env.DOCKER_PASS }}
+
+      - name: Build and push backend image
+        if: steps.backend-changes.outputs.changed != ''
+        run: |
+          cd backend
+          docker build -t ${{ env.DOCKER_USER }}/fastapi-server:latest .
+          docker push ${{ env.DOCKER_USER }}/fastapi-server:latest
+
+      - name: Upload backend .env to EC2
+        if: steps.backend-changes.outputs.changed != ''
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: ${{ env.EC2_HOST }}
+          username: ${{ env.EC2_USER }}
+          key: ${{ env.EC2_KEY }}
+          source: "backend/.env"
+          target: "/home/ubuntu/app/backend/.env"
+
+      - name: Deploy backend on EC2
+        if: steps.backend-changes.outputs.changed != ''
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ env.EC2_HOST }}
+          username: ${{ env.EC2_USER }}
+          key: ${{ env.EC2_KEY }}
+          script: |
+            cd /home/ubuntu/app
+            git pull origin main
+            cd backend
+            docker compose pull
+            docker compose up -d
+
+  deploy-frontend:
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect frontend changes
+        id: frontend-changes
+        run: |
+          files=$(git diff --name-only ${{ github.event.before || 'HEAD~1' }} $GITHUB_SHA)
+          echo "changed=$(echo "$files" | grep '^frontend/' || true)" >> $GITHUB_OUTPUT
+
+      - name: Build frontend
+        if: steps.frontend-changes.outputs.changed != ''
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+
+      - name: Deploy frontend build to EC2
+        if: steps.frontend-changes.outputs.changed != ''
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: ${{ env.EC2_HOST }}
+          username: ${{ env.EC2_USER }}
+          key: ${{ env.EC2_KEY }}
+          source: "frontend/build/*"
+          target: "/home/ubuntu/app/frontend/build/"
