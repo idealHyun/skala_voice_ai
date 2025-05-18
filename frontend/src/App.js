@@ -17,7 +17,7 @@ function App() {
     try {
       console.log(process.env.REACT_APP_API_URL);
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tts/`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}api/tts/`, {
         method: 'POST',
         body: formData
       });
@@ -50,7 +50,7 @@ function App() {
     formData.append('audio', audioInputRef.current.files[0]);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/stt/`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}api/stt/`, {
         method: 'POST',
         body: formData,
       });
