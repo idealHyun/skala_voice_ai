@@ -46,6 +46,7 @@ jobs:
 
       - name: Generate .env file from secrets
         run: |
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > backend/.env
           echo "PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}" > backend/.env
           echo "PINECONE_HOST=${{ secrets.PINECONE_HOST }}" >> backend/.env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> backend/.env
@@ -90,6 +91,11 @@ jobs:
         run: |
           files=$(git diff --name-only ${{ github.event.before || 'HEAD~1' }} $GITHUB_SHA)
           echo "changed=$(echo "$files" | grep '^frontend/' || true)" >> $GITHUB_OUTPUT
+
+      - name: Generate frontend .env file from secrets
+        if: steps.frontend-changes.outputs.changed != ''
+        run: |
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > frontend/.env
 
       - name: Build frontend
         if: steps.frontend-changes.outputs.changed != ''
