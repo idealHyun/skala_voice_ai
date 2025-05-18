@@ -17,7 +17,7 @@ function App() {
     try {
       console.log(process.env.REACT_APP_API_URL);
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tts`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tts/`, {
         method: 'POST',
         body: formData
       });
@@ -28,7 +28,7 @@ function App() {
         throw new Error(data);
       }
 
-      setAudioSrc(`${process.env.REACT_APP_UPLOAD_URL}${data.file_path}`);
+      setAudioSrc(`${process.env.REACT_APP_API_URL}${data.file_path}`);
     } catch (error) {
       console.error('TTS Error:', error);
       alert(`TTS 처리 중 오류 발생: ${error.message}`);
@@ -50,7 +50,7 @@ function App() {
     formData.append('audio', audioInputRef.current.files[0]);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/stt`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/stt/`, {
         method: 'POST',
         body: formData,
       });
