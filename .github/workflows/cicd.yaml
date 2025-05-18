@@ -79,6 +79,8 @@ jobs:
             cd /home/ubuntu/app
             git pull origin main
             cd backend
+            docker compose down
+            docker image prune -af
             docker compose pull
             docker compose up -d
 
