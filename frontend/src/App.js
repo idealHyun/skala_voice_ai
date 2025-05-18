@@ -89,7 +89,7 @@ function App() {
       <br /><br />
       {sttText && (
         <div>
-          <h3>인식된 텍스트:</h3>
+          <h3>인식된 텍스트 :</h3>
           <pre>{sttText}</pre>
         </div>
       )}
