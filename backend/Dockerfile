@@ -1,19 +1,12 @@
 FROM python:3.11-slim
 
-# ─────────────────────────────────────────
-# 시스템 패키지: whisper 빌드·오디오 처리용
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        git \
-        build-essential \
-        rustc \
-        cargo \
-        ffmpeg \
-        libsndfile1 && \
+    apt-get install -y ffmpeg && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# ─────────────────────────────────────────
+RUN apt-get update && apt-get install -y ffmpeg
+
 WORKDIR /app
 COPY requirements.txt ./
 COPY . /app
