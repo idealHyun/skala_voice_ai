@@ -15,6 +15,8 @@ function App() {
     formData.append('text', text);
 
     try {
+      console.log(process.env.REACT_APP_API_URL);
+
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tts`, {
         method: 'POST',
         body: formData
