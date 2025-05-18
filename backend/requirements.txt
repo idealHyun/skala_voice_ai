@@ -4,4 +4,3 @@ pydub==0.25.1
 python-dotenv==1.1.0
 Requests==2.32.3
 uvicorn==0.34.2
-whisper==1.1.10
