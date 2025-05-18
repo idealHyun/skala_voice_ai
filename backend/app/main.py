@@ -45,7 +45,7 @@ api_app.include_router(stt_tts_router, prefix="/stt-tts")
 
 @api_app.get("/hello")
 def read_hello():
-    return "hello word!!"
+    return "hello word!"
 
 @api_app.get("/stt-tts")
 async def serve_stt_tts_page():

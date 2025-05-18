@@ -90,7 +90,8 @@ jobs:
         id: frontend-changes
         run: |
           files=$(git diff --name-only ${{ github.event.before || 'HEAD~1' }} $GITHUB_SHA)
-          echo "changed=$(echo "$files" | grep '^frontend/' || true)" >> $GITHUB_OUTPUT
+          first=$(echo "$files" | grep '^frontend/' | head -n 1 || true)
+          echo "changed=$first" >> $GITHUB_OUTPUT
 
       - name: Generate frontend .env file from secrets
         if: steps.frontend-changes.outputs.changed != ''
