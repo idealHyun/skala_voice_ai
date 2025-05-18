@@ -18,7 +18,6 @@ env:
   DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
-
   deploy-backend:
     if: github.event_name == 'push' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
@@ -31,24 +30,32 @@ jobs:
         id: backend-changes
         run: |
           files=$(git diff --name-only ${{ github.event.before || 'HEAD~1' }} $GITHUB_SHA)
-          changed=$(echo "$files" | grep '^backend/' || true)
-          echo "changed=$(echo "$changed" | base64 -w0)" >> $GITHUB_OUTPUT
+          echo "changed_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$files" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          if echo "$files" | grep -q '^backend/'; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Log in to Docker Hub
-        if: steps.backend-changes.outputs.changed != ''
+        if: steps.backend-changes.outputs.changed == 'true'
         uses: docker/login-action@v2
         with:
           username: ${{ env.DOCKER_USER }}
           password: ${{ env.DOCKER_PASS }}
 
       - name: Build and push backend image
-        if: steps.backend-changes.outputs.changed != ''
+        if: steps.backend-changes.outputs.changed == 'true'
         run: |
           cd backend
           docker build -t ${{ env.DOCKER_USER }}/fastapi-server:latest .
           docker push ${{ env.DOCKER_USER }}/fastapi-server:latest
 
       - name: Generate .env file from secrets
+        if: steps.backend-changes.outputs.changed == 'true'
         run: |
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > backend/.env
           echo "PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}" >> backend/.env
@@ -59,7 +66,7 @@ jobs:
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> backend/.env
 
       - name: Upload backend .env to EC2
-        if: steps.backend-changes.outputs.changed != ''
+        if: steps.backend-changes.outputs.changed == 'true'
         uses: appleboy/scp-action@v0.1.5
         with:
           host: ${{ env.EC2_HOST }}
@@ -69,7 +76,7 @@ jobs:
           target: "/home/ubuntu/app/"
 
       - name: Deploy backend on EC2
-        if: steps.backend-changes.outputs.changed != ''
+        if: steps.backend-changes.outputs.changed == 'true'
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ env.EC2_HOST }}
@@ -96,23 +103,30 @@ jobs:
         id: frontend-changes
         run: |
           files=$(git diff --name-only ${{ github.event.before || 'HEAD~1' }} $GITHUB_SHA)
-          first=$(echo "$files" | grep '^frontend/' | head -n 1 || true)
-          echo "changed=$first" >> $GITHUB_OUTPUT
+          echo "changed_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$files" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          if echo "$files" | grep -q '^frontend/'; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Generate frontend .env file from secrets
-        if: steps.frontend-changes.outputs.changed != ''
+        if: steps.frontend-changes.outputs.changed == 'true'
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > frontend/.env
 
       - name: Build frontend
-        if: steps.frontend-changes.outputs.changed != ''
+        if: steps.frontend-changes.outputs.changed == 'true'
         run: |
           cd frontend
           npm ci
           npm run build
 
       - name: Remove existing frontend build
-        if: steps.frontend-changes.outputs.changed != ''
+        if: steps.frontend-changes.outputs.changed == 'true'
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -122,7 +136,7 @@ jobs:
             sudo rm -rf /home/***/app/frontend/build
 
       - name: Deploy frontend build to EC2
-        if: steps.frontend-changes.outputs.changed != ''
+        if: steps.frontend-changes.outputs.changed == 'true'
         uses: appleboy/scp-action@v0.1.5
         with:
           host: ${{ secrets.EC2_HOST }}
