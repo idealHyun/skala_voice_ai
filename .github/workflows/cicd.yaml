@@ -112,6 +112,7 @@ jobs:
           npm run build
 
       - name: Remove existing frontend build
+        if: steps.frontend-changes.outputs.changed != ''
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
