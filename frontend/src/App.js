@@ -17,7 +17,7 @@ function App() {
     try {
       console.log(process.env.REACT_APP_API_URL);
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tts`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/api/tts`, {
         method: 'POST',
         body: formData
       });
