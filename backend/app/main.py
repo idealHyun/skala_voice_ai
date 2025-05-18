@@ -24,15 +24,15 @@ app.add_middleware(
 )
 
 # ✅ 모든 API는 "/api" prefix로 직접 연결
-app.include_router(stt_router, prefix="/api/stt")
-app.include_router(tts_router, prefix="/api/tts")
-app.include_router(stt_tts_router, prefix="/api/stt-tts")
+app.include_router(stt_router, prefix="/stt")
+app.include_router(tts_router, prefix="/tts")
+app.include_router(stt_tts_router, prefix="/stt-tts")
 
-@app.get("/api/hello")
+@app.get("/hello")
 def read_hello():
     return "hello word"
 
-@app.get("/api/api-key")
+@app.get("/api-key")
 async def get_api_key():
     return JSONResponse(content={"api_key": OPENAI_API_KEY})
 

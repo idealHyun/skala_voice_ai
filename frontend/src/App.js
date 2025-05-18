@@ -20,17 +20,22 @@ function App() {
         body: formData
       });
 
-      if (!response.ok) throw new Error('TTS 요청 실패');
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data);
+      }
+
       setAudioSrc(`${process.env.REACT_APP_API_URL}${data.file_path}`);
     } catch (error) {
-      console.error(error);
-      alert('TTS 처리 중 오류 발생');
+      console.error('TTS Error:', error);
+      alert(`TTS 처리 중 오류 발생: ${error.message}`);
     } finally {
       setLoadingTTS(false);
     }
   };
+
+
 
   const handleSTT = async () => {
     if (!audioInputRef.current.files[0]) {
