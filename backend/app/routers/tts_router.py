@@ -14,6 +14,8 @@ async def tts_endpoint(text: str = Form(...)):
         filename = "openai_tts_output.mp3"
         output_path = os.path.join(UPLOAD_DIR, filename)
         text_to_speech(text, output_path)
+        print(text)
+
         return {
             "message": "TTS 처리 완료 (OpenAI TTS)",
             "file_path": f"/uploads/{filename}"
