@@ -3,5 +3,5 @@ services:
     image: idealhyun2/fastapi-server:latest
     ports:
       - "8000:8000"
-    env_file:
-      - .env
+    environment:
+      - OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
