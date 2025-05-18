@@ -17,9 +17,11 @@ WORKDIR /app
 COPY requirements.txt ./
 COPY . /app
 
-# 의존성 설치
+# 1. pip 업그레이드 + requirements 설치
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt \
+    pip install --no-cache-dir -r requirements.txt
+
+# 2. whisper 별도 설치
 RUN pip install git+https://github.com/openai/whisper.git
 
 # FastAPI 애플리케이션 실행
