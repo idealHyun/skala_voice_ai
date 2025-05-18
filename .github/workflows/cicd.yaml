@@ -109,6 +109,14 @@ jobs:
           npm ci
           npm run build
 
+      - name: Remove existing frontend build
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: rm -rf /home/your-user/app/frontend/build
+
       - name: Deploy frontend build to EC2
         if: steps.frontend-changes.outputs.changed != ''
         uses: appleboy/scp-action@v0.1.5
