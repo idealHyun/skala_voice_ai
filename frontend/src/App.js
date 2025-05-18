@@ -41,7 +41,7 @@ function App() {
 
   const handleSTT = async () => {
     if (!audioInputRef.current.files[0]) {
-      alert('파일을 선택하세요');
+      alert('파일을 선택하세요 ');
       return;
     }
 

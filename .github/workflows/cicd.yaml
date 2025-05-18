@@ -117,6 +117,7 @@ jobs:
         if: steps.frontend-changes.outputs.changed == 'true'
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" > frontend/.env
+          echo "REACT_APP_UPLOAD_URL=${{ secrets.REACT_APP_UPLOAD_URL }}" >> frontend/.env
 
       - name: Build frontend
         if: steps.frontend-changes.outputs.changed == 'true'
