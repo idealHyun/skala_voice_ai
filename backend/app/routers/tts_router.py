@@ -11,11 +11,12 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 @router.post("/")
 async def tts_endpoint(text: str = Form(...)):
     try:
-        output_path = os.path.join(UPLOAD_DIR, "openai_tts_output.mp3")
-        file_path = text_to_speech(text, output_path)
+        filename = "openai_tts_output.mp3"
+        output_path = os.path.join(UPLOAD_DIR, filename)
+        text_to_speech(text, output_path)
         return {
             "message": "TTS 처리 완료 (OpenAI TTS)",
-            "file_path": file_path
+            "file_path": f"/uploads/{filename}"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
