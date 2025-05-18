@@ -47,6 +47,9 @@ app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
 # 정적 파일 (STT → GPT → TTS 프론트엔드)
 stt_tts_path = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'stt-tts.html')
 
+@app.get("/hello")
+def read_hello():
+    return "helloword"
 @app.get("/stt-tts")
 async def serve_stt_tts_page():
     from fastapi.responses import FileResponse
