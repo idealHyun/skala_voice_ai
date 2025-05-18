@@ -1,10 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse, FileResponse
 from app.routers.stt_router import router as stt_router
 from app.routers.tts_router import router as tts_router
 from app.routers.stt_tts_router import router as stt_tts_router
-from fastapi.responses import JSONResponse, FileResponse
 from dotenv import load_dotenv
 import os
 
@@ -18,13 +17,9 @@ if not OPENAI_API_KEY:
 # 경로
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "routers", "uploads")
-FRONTEND_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend')
-STT_TTS_HTML = os.path.join(FRONTEND_DIR, 'stt-tts.html')
 
 # 최상위 앱
 app = FastAPI()
-app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
-app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
 
 # API 전용 서브 앱
 api_app = FastAPI()
@@ -46,12 +41,6 @@ api_app.include_router(stt_tts_router, prefix="/stt-tts")
 @api_app.get("/hello")
 def read_hello():
     return "hello word"
-
-@api_app.get("/stt-tts")
-async def serve_stt_tts_page():
-    if not os.path.exists(STT_TTS_HTML):
-        raise HTTPException(status_code=404, detail="stt-tts.html 파일을 찾을 수 없습니다.")
-    return FileResponse(STT_TTS_HTML)
 
 @api_app.get("/api-key")
 async def get_api_key():
