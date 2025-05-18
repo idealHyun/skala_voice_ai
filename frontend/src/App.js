@@ -28,7 +28,7 @@ function App() {
         throw new Error(data);
       }
 
-      setAudioSrc(`${process.env.REACT_APP_API_URL}${data.file_path}`);
+      setAudioSrc(`${process.env.REACT_APP_UPLOAD_URL}${data.file_path}`);
     } catch (error) {
       console.error('TTS Error:', error);
       alert(`TTS 처리 중 오류 발생: ${error.message}`);
