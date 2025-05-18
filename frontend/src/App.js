@@ -28,6 +28,8 @@ function App() {
         throw new Error(data);
       }
 
+      console.log(data);
+
       setAudioSrc(`${process.env.REACT_APP_API_URL}${data.file_path}`);
     } catch (error) {
       console.error('TTS Error:', error);
