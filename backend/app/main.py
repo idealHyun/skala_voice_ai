@@ -30,7 +30,7 @@ app.include_router(stt_tts_router, prefix="/stt-tts")
 
 @app.get("/hello")
 def read_hello():
-    return "hello word"
+    return "hello word!!!!!"
 
 @app.get("/api-key")
 async def get_api_key():
