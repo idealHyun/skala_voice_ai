@@ -46,13 +46,14 @@ jobs:
 
       - name: Generate .env file from secrets
         run: |
-          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > backend/.env
-          echo "PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}" > backend/.env
-          echo "PINECONE_HOST=${{ secrets.PINECONE_HOST }}" >> backend/.env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> backend/.env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> backend/.env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> backend/.env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> backend/.env
+          run: |
+            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > backend/.env
+            echo "PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}" >> backend/.env
+            echo "PINECONE_HOST=${{ secrets.PINECONE_HOST }}" >> backend/.env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> backend/.env
+            echo "DB_USER=${{ secrets.DB_USER }}" >> backend/.env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> backend/.env
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> backend/.env
 
       - name: Upload backend .env to EC2
         if: steps.backend-changes.outputs.changed != ''
