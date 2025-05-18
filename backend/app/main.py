@@ -49,7 +49,7 @@ stt_tts_path = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'stt-tt
 
 @app.get("/hello")
 def read_hello():
-    return "hello word"
+    return "hello word!"
 @app.get("/stt-tts")
 async def serve_stt_tts_page():
     from fastapi.responses import FileResponse
