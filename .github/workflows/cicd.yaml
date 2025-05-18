@@ -65,8 +65,8 @@ jobs:
           host: ${{ env.EC2_HOST }}
           username: ${{ env.EC2_USER }}
           key: ${{ env.EC2_KEY }}
-          source: ".env"
-          target: "/home/ubuntu/app/backend/"
+          source: "backend/.env"
+          target: "/home/ubuntu/app/"
 
       - name: Deploy backend on EC2
         if: steps.backend-changes.outputs.changed != ''
