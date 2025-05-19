@@ -4,6 +4,8 @@ from fastapi.responses import JSONResponse
 from app.routers.stt_router import router as stt_router
 from app.routers.tts_router import router as tts_router
 from app.routers.stt_tts_router import router as stt_tts_router
+from app.routers.recommendation_router import router as recommendation_router
+from app.routers.customers_router import router as customers_router
 from dotenv import load_dotenv
 import os
 
@@ -27,6 +29,8 @@ app.add_middleware(
 app.include_router(stt_router, prefix="/stt")
 app.include_router(tts_router, prefix="/tts")
 app.include_router(stt_tts_router, prefix="/stt-tts")
+app.include_router(recommendation_router, prefix="/recommendation")
+app.include_router(customers_router, prefix="/customers")
 
 @app.get("/hello")
 def read_hello():
