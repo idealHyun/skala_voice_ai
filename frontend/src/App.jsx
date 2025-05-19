@@ -17,7 +17,6 @@ export default App;
 
 
 // import React, { useState, useRef } from 'react';
-
 // function App() {
 //   const [text, setText] = useState('');
 //   const [audioSrc, setAudioSrc] = useState(null);
