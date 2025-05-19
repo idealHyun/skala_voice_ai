@@ -6,15 +6,14 @@ import databases
 import os
 from dotenv import load_dotenv
 
-dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
-load_dotenv(dotenv_path)
+load_dotenv()
 
 # DB URL 구성
 from urllib.parse import quote_plus
-password = quote_plus(os.getenv("DB_PASSWORD"))
+password = quote_plus()
 
 DATABASE_URL = (
-    f"mysql+aiomysql://{os.getenv('DB_USER')}:{password}@"
+    f"mysql+aiomysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@"
     f"{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/skala"
 )
 
