@@ -1,19 +1,19 @@
 import os
-import openai
-from typing import List, Dict
-from langchain.embeddings import OpenAIEmbeddings
+from dotenv import load_dotenv
+from openai import OpenAI
+from typing import Dict
+from langchain_openai import OpenAIEmbeddings
 
-# API 키 설정
-openai.api_key = os.getenv("OPENAI_API_KEY")
+load_dotenv()
 
-# OpenAI 임베딩 모델
-embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+embedding_model = OpenAIEmbeddings(
+    model="text-embedding-3-small",
+    openai_api_key=os.getenv("OPENAI_API_KEY")
+)
 
 def analyze_conversation(text: str) -> Dict:
-    """
-    STT 텍스트를 받아 요약문, 질문 유형, 감정, 키워드 3개를 추출합니다.
-    """
     prompt = f"""
     아래는 보험 상담 중 고객이 발화한 문장입니다.
 
@@ -24,10 +24,9 @@ def analyze_conversation(text: str) -> Dict:
     4. 상담 목적과 관련된 핵심 단어 3개를 추출하세요. (쉼표로 구분)
 
     발화 내용:
-    \"{text}\"
-    """
+    \"{text}\""""
 
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],
         temperature=0
@@ -39,7 +38,7 @@ def analyze_conversation(text: str) -> Dict:
     summary = lines[0].split(":", 1)[-1].strip()
     question_type = lines[1].split(":", 1)[-1].strip()
     emotion = lines[2].split(":", 1)[-1].strip()
-    keywords = [k.strip() for k in lines[3].split(":", 1)[-1].split(",") if k.strip()]
+    keywords = lines[3].split(":", 1)[-1].strip()
 
     return {
         "summary": summary,
@@ -49,9 +48,5 @@ def analyze_conversation(text: str) -> Dict:
     }
 
 
-def get_purpose_vector(keywords: List[str]) -> List[float]:
-    """
-    키워드 3개를 하나의 문장으로 결합하여 임베딩 벡터 생성 (OpenAI 1536차원)
-    """
-    keyword_string = " ".join(keywords)
-    return embedding_model.embed_query(keyword_string)
+def get_purpose_vector(keywords: str) -> list:
+    return embedding_model.embed_query(keywords)
