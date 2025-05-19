@@ -1,17 +1,26 @@
 import React from 'react';
 import { Container, Typography, Card, CardContent } from '@mui/material';
 import Home from './components/Home';
+import logo from './logo.png';
 
 function App() {
   return (
-    <Container maxWidth="md" style={{ marginTop: '5rem' }}>
-          <Typography variant="h3" align="center" gutterBottom>
-            대화 요약 및 상품 추천 서비스
-          </Typography>
-          <Home />
+    <Container maxWidth="md" style={{ marginTop: '5rem', textAlign: 'center' }}>
+      <img
+        src={logo}
+        alt="로고"
+        style={{ height: '100px', marginBottom: '1rem' }}
+      />
+
+      <Typography variant="h3" align="center" gutterBottom>
+        대화 요약 및 상품 추천 서비스
+      </Typography>
+
+      <Home />
     </Container>
   );
 }
+
 
 export default App;
 
