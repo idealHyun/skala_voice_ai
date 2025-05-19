@@ -5,10 +5,6 @@ import openai
 from pinecone import Pinecone
 from pydantic import BaseModel
 from typing import List
-from dotenv import load_dotenv
-
-dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
-load_dotenv(dotenv_path)
 
 class Recommendation(BaseModel):
     label: str
