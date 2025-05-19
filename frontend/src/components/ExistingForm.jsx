@@ -4,7 +4,6 @@ import {
     Button,
     Box,
     Typography,
-    Paper,
     Stack,
     Grid,
     Autocomplete,
@@ -20,10 +19,13 @@ const mockCustomers = [
         address: '경기도',
         phone: '010-1234-1234',
         job: '회사원',
-        income: 4000,
+        income: '2,000~3,000만원',
         insuranceCount: 3,
     },
 ];
+
+const jobOptions = ['공무원', '교사', '대학생', '대학원생', '자영업자', '주부', '프리랜서', '회사원', '기타'];
+const incomeOptions = ['1,000만원 이하', '1,000~2,000만원', '2,000~3,000만원', '3,000~4,000만원', '4,000~5,000만원', '5,000만원 이상'];
 
 function CustomerDisplayForm({ customer, onUpdate }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -47,7 +49,7 @@ function CustomerDisplayForm({ customer, onUpdate }) {
                     fullWidth
                     value={edited.name}
                     onChange={(e) => handleChange('name', e.target.value)}
-                    InputProps={{ readOnly: !isEditing }}
+                    InputProps={{ disabled: !isEditing }}
                 />
 
                 <Autocomplete
@@ -63,12 +65,12 @@ function CustomerDisplayForm({ customer, onUpdate }) {
                             fullWidth
                             InputProps={{
                                 ...params.InputProps,
-                                readOnly: !isEditing,
+                                disabled: !isEditing,
                             }}
                         />
                     )}
                     disableClearable
-                    readOnly={!isEditing}
+                    disabled={!isEditing}
                 />
 
                 <TextField
@@ -77,7 +79,7 @@ function CustomerDisplayForm({ customer, onUpdate }) {
                     fullWidth
                     value={edited.age}
                     onChange={(e) => handleChange('age', e.target.value)}
-                    InputProps={{ readOnly: !isEditing }}
+                    InputProps={{ disabled: !isEditing }}
                 />
 
                 <Autocomplete
@@ -93,12 +95,12 @@ function CustomerDisplayForm({ customer, onUpdate }) {
                             fullWidth
                             InputProps={{
                                 ...params.InputProps,
-                                readOnly: !isEditing,
+                                disabled: !isEditing,
                             }}
                         />
                     )}
                     disableClearable
-                    readOnly={!isEditing}
+                    disabled={!isEditing}
                 />
 
                 <Grid container spacing={2}>
@@ -108,7 +110,7 @@ function CustomerDisplayForm({ customer, onUpdate }) {
                             fullWidth
                             value={edited.address}
                             onChange={(e) => handleChange('address', e.target.value)}
-                            InputProps={{ readOnly: !isEditing }}
+                            InputProps={{ disabled: !isEditing }}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -116,7 +118,7 @@ function CustomerDisplayForm({ customer, onUpdate }) {
                             label="상세 주소"
                             fullWidth
                             value="-"
-                            InputProps={{ readOnly: true }}
+                            InputProps={{ disabled: true }}
                         />
                     </Grid>
                 </Grid>
@@ -126,23 +128,45 @@ function CustomerDisplayForm({ customer, onUpdate }) {
                     fullWidth
                     value={edited.phone}
                     onChange={(e) => handleChange('phone', e.target.value)}
-                    InputProps={{ readOnly: !isEditing }}
+                    InputProps={{ disabled: !isEditing }}
                 />
 
-                <TextField
-                    label="직업"
-                    fullWidth
+                <Autocomplete
+                    options={jobOptions}
                     value={edited.job}
-                    onChange={(e) => handleChange('job', e.target.value)}
-                    InputProps={{ readOnly: !isEditing }}
+                    onChange={(_, value) => handleChange('job', value)}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="직업"
+                            fullWidth
+                            InputProps={{
+                                ...params.InputProps,
+                                disabled: !isEditing,
+                            }}
+                        />
+                    )}
+                    disableClearable
+                    disabled={!isEditing}
                 />
 
-                <TextField
-                    label="소득"
-                    fullWidth
+                <Autocomplete
+                    options={incomeOptions}
                     value={edited.income}
-                    onChange={(e) => handleChange('income', e.target.value)}
-                    InputProps={{ readOnly: !isEditing }}
+                    onChange={(_, value) => handleChange('income', value)}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="소득"
+                            fullWidth
+                            InputProps={{
+                                ...params.InputProps,
+                                readOnly: !isEditing,
+                            }}
+                        />
+                    )}
+                    disableClearable
+                    disabled={!isEditing}
                 />
 
                 <TextField
@@ -150,10 +174,11 @@ function CustomerDisplayForm({ customer, onUpdate }) {
                     fullWidth
                     value={edited.insuranceCount}
                     onChange={(e) => handleChange('insuranceCount', e.target.value)}
-                    InputProps={{ readOnly: !isEditing }}
+                    InputProps={{ disabled: !isEditing }}
                 />
 
                 <Button
+                    color="orange"
                     variant="contained"
                     fullWidth
                     size="large"
@@ -202,6 +227,7 @@ function ExistingForm() {
                     fullWidth
                 />
                 <Button
+                    color="orange"
                     variant="contained"
                     fullWidth
                     size="large"

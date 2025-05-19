@@ -57,7 +57,9 @@ export default function NewForm() {
                     options={incomeOptions}
                     renderInput={(params) => <TextField {...params} required label="소득" fullWidth />}
                 />
+                <TextField required label="보험 가입 개수" type="number" fullWidth />
                 <Button
+                    color="orange"
                     variant="contained"
                     fullWidth
                     size="large"
