@@ -125,6 +125,8 @@ jobs:
           cd frontend
           npm ci
           npm run build
+        env:
+          CI: false
 
       - name: Remove existing frontend build
         if: steps.frontend-changes.outputs.changed == 'true'
