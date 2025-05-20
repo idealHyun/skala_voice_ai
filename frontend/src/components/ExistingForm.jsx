@@ -135,7 +135,7 @@ function CustomerDisplayForm({ customer, onUpdate }) {
 
                     <Autocomplete
                         options={jobOptions}
-                        value={edited.job}
+                        value={edited.occupation}
                         onChange={(_, value) => handleChange('job', value)}
                         renderInput={(params) => (
                             <TextField
@@ -151,7 +151,7 @@ function CustomerDisplayForm({ customer, onUpdate }) {
 
                     <Autocomplete
                         options={incomeOptions}
-                        value={edited.income}
+                        value={edited.income_range}
                         onChange={(_, value) => handleChange('income', value)}
                         renderInput={(params) => (
                             <TextField
@@ -168,7 +168,7 @@ function CustomerDisplayForm({ customer, onUpdate }) {
                     <TextField
                         label="보험 가입 개수"
                         fullWidth
-                        value={edited.insuranceCount}
+                        value={edited.insurance_count}
                         onChange={(e) => handleChange('insuranceCount', e.target.value)}
                         InputProps={{ disabled: !isEditing }}
                     />
@@ -194,11 +194,12 @@ function ExistingForm() {
     const [customer, setCustomer] = useState(null);
     const [searched, setSearched] = useState(false);
 
-    const handleSearch = () => {
-        const found = mockCustomers.find(
-            (c) => c.name === name && c.phone.endsWith(phoneSuffix)
-        );
-        setCustomer(found || null);
+    const handleSearch = async () => {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/customers?name=${name}&phone_suffix=${phoneSuffix}`);
+        const data = await res.json();
+        const customer = data[0]
+        console.log(customer)
+        setCustomer(customer);
         setSearched(true);
     };
 
