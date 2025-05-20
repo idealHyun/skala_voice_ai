@@ -90,7 +90,7 @@ function CustomerDisplayForm({ customer, onUpdate }) {
                             <TextField
                                 label="상세 주소"
                                 fullWidth
-                                value="-"
+                                value={edited.address_detail}
                                 InputProps={{ disabled: true }}
                             />
                         </Grid>
