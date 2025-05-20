@@ -4,9 +4,9 @@ import numpy as np
 from pathlib import Path
 
 # 모델 및 인코더 파일 경로
-MODEL_PATH = Path("model/gradientboosting_model_newest.pkl")
-LABEL_ENCODER_PATH = Path("model/label_encoder_newest.pkl")
-CATEGORY_ENCODERS_PATH = Path("model/category_encoders_newest.pkl")
+MODEL_PATH = Path("model/gradientboosting_model_final.pkl")
+LABEL_ENCODER_PATH = Path("model/label_encoder_final.pkl")
+CATEGORY_ENCODERS_PATH = Path("model/category_encoders_final.pkl")
 
 # 모델과 인코더 불러오기
 with open(MODEL_PATH, "rb") as f:
