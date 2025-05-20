@@ -10,21 +10,6 @@ import {
     Autocomplete,
 } from '@mui/material';
 
-const mockCustomers = [
-    {
-        id: 1,
-        name: '홍길동',
-        age: 40,
-        gender: 'F',
-        married: 'Y',
-        address: '경기도',
-        phone: '010-1234-1234',
-        job: '회사원',
-        income: '2,000~3,000만원',
-        insuranceCount: 3,
-    },
-];
-
 const jobOptions = ['공무원', '교사', '대학생', '대학원생', '자영업자', '주부', '프리랜서', '회사원', '기타'];
 const incomeOptions = ['1,000만원 이하', '1,000~2,000만원', '2,000~3,000만원', '3,000~4,000만원', '4,000~5,000만원', '5,000만원 이상'];
 
