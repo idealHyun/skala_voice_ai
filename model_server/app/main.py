@@ -9,7 +9,7 @@ app = FastAPI()
 
 @app.get("/hello")
 def read_root():
-    return "hello"
+    return "hello world"
 
 # 입력 스키마
 class PredictRequest(BaseModel):
