@@ -5,15 +5,9 @@ from app.services.analyzer_service import analyze_conversation, get_purpose_vect
 
 router = APIRouter()
 
-# STT 결과용 스키마
-class STTEntry(BaseModel):
-    speaker: str
-    start: float
-    end: float
-    text: str
-
+# 🟡 새로 바뀐 STT 형식: 문자열 전체를 받음
 class AnalyzeRequest(BaseModel):
-    dialogue: List[STTEntry]
+    result: str  # "고객: ...\n상담원: ..." 형식의 대화 문자열
 
 class AnalyzeResponse(BaseModel):
     summary: str
@@ -25,7 +19,8 @@ class AnalyzeResponse(BaseModel):
 @router.post("/analyze", response_model=AnalyzeResponse)
 async def analyze(request: AnalyzeRequest):
     try:
-        result = analyze_conversation([entry.dict() for entry in request.dialogue])
+        # 🟡 문자열 기반 분석 함수 호출
+        result = analyze_conversation(request.result)
         embedding = get_purpose_vector(result["keywords"])
 
         return AnalyzeResponse(
