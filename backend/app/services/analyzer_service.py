@@ -1,7 +1,7 @@
+from typing import List, Dict
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
-from typing import Dict
 from langchain_openai import OpenAIEmbeddings
 
 load_dotenv()
@@ -13,22 +13,38 @@ embedding_model = OpenAIEmbeddings(
     openai_api_key=os.getenv("OPENAI_API_KEY")
 )
 
-def analyze_conversation(text: str) -> Dict:
-    prompt = f"""
-    아래는 보험 상담 중 고객이 발화한 문장입니다.
 
-    다음 정보를 순서대로 출력하세요:
+def analyze_conversation(stt_dialogue: List[Dict[str, str]]) -> Dict:
+    """
+    STT로 분리된 상담사/고객 대화 전체를 기반으로,
+    고객(SPEAKER_01)의 발화를 중심으로 분석 수행
+    """
+    system_prompt = """
+    너는 보험 상담 데이터를 분석하는 AI야.
+    지금부터 상담사([상담사]:)와 고객([고객]:) 간의 대화 이력을 줄 테니,
+    '고객'의 발화를 중심으로 다음을 분석해줘:
+
     1. 고객 발화를 간단히 요약하세요. (한 문장)
     2. 질문 유형을 분류하세요. (의문형 / 정보 요청형 / 의도 표출형 중 하나)
     3. 고객의 감정을 분류하세요. (긍정 / 중립 / 부정 중 하나)
     4. 상담 목적과 관련된 핵심 단어 3개를 추출하세요. (쉼표로 구분)
+    """
 
-    발화 내용:
-    \"{text}\""""
+    # STT JSON을 프롬프트용 텍스트로 변환
+    converted_dialogue = []
+    for turn in stt_dialogue:
+        speaker_tag = "[상담사]" if turn["speaker"] == "SPEAKER_00" else "[고객]"
+        converted_dialogue.append(f"{speaker_tag}: {turn['text']}")
+
+    # 메시지 구성
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": "\n".join(converted_dialogue)}
+    ]
 
     response = client.chat.completions.create(
         model="gpt-4o",
-        messages=[{"role": "user", "content": prompt}],
+        messages=messages,
         temperature=0
     )
 
@@ -49,4 +65,7 @@ def analyze_conversation(text: str) -> Dict:
 
 
 def get_purpose_vector(keywords: str) -> list:
+    """
+    쉼표로 연결된 키워드 문자열을 임베딩하여 벡터 생성
+    """
     return embedding_model.embed_query(keywords)
