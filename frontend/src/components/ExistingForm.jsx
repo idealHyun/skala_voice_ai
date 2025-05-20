@@ -9,6 +9,7 @@ import {
     Grid,
     Autocomplete,
 } from '@mui/material';
+import { useCustomer } from '../context/CustomerContext';
 
 const jobOptions = ['공무원', '교사', '대학생', '대학원생', '자영업자', '주부', '프리랜서', '회사원', '기타'];
 const incomeOptions = ['1,000만원 이하', '1,000~2,000만원', '2,000~3,000만원', '3,000~4,000만원', '4,000~5,000만원', '5,000만원 이상'];
@@ -162,8 +163,9 @@ function CustomerDisplayForm({ customer, onUpdate }) {
 function ExistingForm() {
     const [name, setName] = useState('');
     const [phoneSuffix, setPhoneSuffix] = useState('');
-    const [customer, setCustomer] = useState(null);
+    const [customer, setCustomerLocal] = useState(null);
     const [searched, setSearched] = useState(false);
+    const { setCustomer } = useCustomer();
 
     const handleSearch = async () => {
         const res = await fetch(`${process.env.REACT_APP_API_URL}/customers?name=${name}&phone_suffix=${phoneSuffix}`);
@@ -171,6 +173,7 @@ function ExistingForm() {
         const customer = data[0]
         console.log(customer)
         setCustomer(customer);
+        setCustomerLocal(customer);
         setSearched(true);
     };
 
