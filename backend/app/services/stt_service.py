@@ -9,7 +9,8 @@ model = whisper.load_model("medium")
 
 # 환경 변수 로드
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
-load_dotenv()
+#load_dotenv()
+load_dotenv(dotenv_path)
 HUGGINGFACE_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 print(f"HUGGINGFACE_TOKEN: {HUGGINGFACE_TOKEN[:8]}..." if HUGGINGFACE_TOKEN else "❌ 환경 변수 로드 실패")
 
