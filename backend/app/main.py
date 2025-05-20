@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from app.routers.stt_router import router as stt_router
 from app.routers.tts_router import router as tts_router
 from app.routers.stt_tts_router import router as stt_tts_router
-from app.routers.recommendation_router import router as recommendation_router
+from app.routers.recommend_router import router as recommend_router
 from app.routers.customers_router import router as customers_router
 from app.routers.stt_tts_router import router as predict_router
 from app.routers.analyze_router import router as analyze_router
@@ -31,7 +31,7 @@ app.add_middleware(
 app.include_router(stt_router, prefix="/stt")
 app.include_router(tts_router, prefix="/tts")
 app.include_router(stt_tts_router, prefix="/stt-tts")
-app.include_router(recommendation_router, prefix="/recommendation")
+app.include_router(recommend_router, prefix="/recommend")
 app.include_router(customers_router, prefix="/customers")
 app.include_router(predict_router, prefix="/predict")
 app.include_router(analyze_router, prefix="/analyze")
