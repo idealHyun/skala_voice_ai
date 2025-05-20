@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Button, Box, Typography, CircularProgress } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Loading from './Loading'
 import axios from 'axios';
 import theme from '../theme';
 import { useNavigate } from 'react-router-dom';
@@ -39,9 +40,8 @@ export default function Upload() {
       setLoading(true);
 
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/stt/`, formData);
-
       console.log('🎤 STT 결과:', res.data.result);
-      setTranscript(res.data.result);  // 👉 STT 결과는 화면에만 표시
+      setTranscript(res.data.result);
 
     } catch (err) {
       console.error('❌ STT 요청 실패:', err.response?.data || err.message);
@@ -56,8 +56,12 @@ export default function Upload() {
     navigate('/result', { state: { result: transcript } });
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" paddingTop={10} paddingBottom={20}>
+    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" paddingTop={10}>
       <Typography variant="h6" gutterBottom>
         상담 녹음 파일을 업로드 해주세요
       </Typography>
@@ -67,10 +71,11 @@ export default function Upload() {
         variant="contained"
         sx={{
           mt: 2,
-          backgroundColor: theme.palette.orange.main,
-          color: theme.palette.orange.contrastText,
+          backgroundColor: '#e0e0e0',
+          color: '#000',
           '&:hover': {
-            backgroundColor: '#d85f1a',
+            backgroundColor: theme.palette.orange.main,
+            color: '#fff',
           },
         }}
         startIcon={<CloudUploadIcon />}
@@ -90,19 +95,28 @@ export default function Upload() {
       {transcript && (
         <>
           <Typography variant="body1" mt={4}>
-            <strong>STT 결과:</strong><br />
+            <h3>STT 결과:</h3><br />
             {transcript.split('\n').map((line, idx) => (
               <span key={idx}>{line}<br /></span>
             ))}
           </Typography>
 
           <Button
-            variant="outlined"
-            sx={{ mt: 3 }}
+            variant="contained"
+            size="large"
+            sx={{
+              mt: 5,
+              backgroundColor: theme.palette.orange.main,
+              color: theme.palette.orange.contrastText,
+              '&:hover': {
+                backgroundColor: '#d85f1a',
+              },
+            }}
             onClick={handleConfirm}
           >
             결과 확인하기
           </Button>
+
         </>
       )}
     </Box>

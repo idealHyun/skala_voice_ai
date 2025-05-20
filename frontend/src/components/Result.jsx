@@ -84,6 +84,23 @@ export default function Result() {
                 추천 보험 상품 결과
             </Typography>
 
+    return (
+        <Box mt={5} px={4}>
+            <Box textAlign="center" mb={3}>
+                <Typography
+                    variant="h5"
+                    gutterBottom
+                    sx={{
+                        color: 'white',
+                        backgroundColor: '#f36f21',
+                        padding: '0.5rem 1.5rem',
+                        borderRadius: 1,
+                        display: 'inline-block',
+                    }}
+                >
+                    추천 보험 상품 결과
+                </Typography>
+            </Box>
 
             {mockResult.map((item, index) => {
                 const paragraphs = item.answer.split('\n\n');
