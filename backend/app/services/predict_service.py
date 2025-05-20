@@ -34,7 +34,7 @@ def predict_insurance(input_data: dict) -> list:
 
         top3_indices = np.argsort(probs)[-3:][::-1]
         top3_labels = label_encoder.inverse_transform(top3_indices)
-        top3_probs = [round(probs[i], 3) for i in top3_indices]
+        top3_probs = [float(round(probs[i], 3)) for i in top3_indices]
 
         return [
             {"label": label, "probability": prob}
