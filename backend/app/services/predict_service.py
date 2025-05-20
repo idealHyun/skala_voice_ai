@@ -4,9 +4,9 @@ import numpy as np
 from pathlib import Path
 
 # 모델 및 인코더 파일 경로
-MODEL_PATH = Path("model/gradientboosting_model.pkl")
-LABEL_ENCODER_PATH = Path("model/label_encoder_new.pkl")
-CATEGORY_ENCODERS_PATH = Path("model/category_encoders.pkl")
+MODEL_PATH = Path("model/gradientboosting_model_newest.pkl")
+LABEL_ENCODER_PATH = Path("model/label_encoder_newest.pkl")
+CATEGORY_ENCODERS_PATH = Path("model/category_encoders_newest.pkl")
 
 # 모델과 인코더 불러오기
 with open(MODEL_PATH, "rb") as f:
@@ -34,7 +34,7 @@ def predict_insurance(input_data: dict) -> list:
 
         top3_indices = np.argsort(probs)[-3:][::-1]
         top3_labels = label_encoder.inverse_transform(top3_indices)
-        top3_probs = [round(probs[i], 3) for i in top3_indices]
+        top3_probs = [float(round(probs[i], 3)) for i in top3_indices]
 
         return [
             {"label": label, "probability": prob}
