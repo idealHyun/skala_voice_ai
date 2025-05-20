@@ -1,6 +1,9 @@
 import React from 'react';
-import { Container, Typography, Card, CardContent } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Container, Typography } from '@mui/material';
 import Home from './components/Home';
+import Success from './components/Success';
+import Upload from './components/Upload';
 import logo from './logo.png';
 
 function App() {
@@ -16,13 +19,17 @@ function App() {
         대화 요약 및 상품 추천 서비스
       </Typography>
 
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/success" element={<Success />} />
+        <Route path="/upload" element={<Upload />} />
+      </Routes>
     </Container>
   );
 }
 
-
 export default App;
+
 
 
 // import React, { useState, useRef } from 'react';
