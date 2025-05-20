@@ -50,8 +50,8 @@ jobs:
         if: steps.model-changes.outputs.changed == 'true'
         run: |
           cd model_server
-          docker build -t ${{ env.DOCKER_USER }}/model-server:latest .
-          docker push ${{ env.DOCKER_USER }}/model-server:latest
+          docker build -t idealhyun2/model-server:latest .
+          docker push idealhyun2/model-server:latest
 
       - name: Generate .env for model_server
         if: steps.model-changes.outputs.changed == 'true'
