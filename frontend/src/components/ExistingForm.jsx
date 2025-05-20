@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     TextField,
     Button,
@@ -30,6 +31,7 @@ const incomeOptions = ['1,000만원 이하', '1,000~2,000만원', '2,000~3,000�
 function CustomerDisplayForm({ customer, onUpdate }) {
     const [isEditing, setIsEditing] = useState(false);
     const [edited, setEdited] = useState({ ...customer });
+    const navigate = useNavigate();
 
     const handleChange = (key, value) => {
         setEdited((prev) => ({ ...prev, [key]: value }));
@@ -42,156 +44,150 @@ function CustomerDisplayForm({ customer, onUpdate }) {
 
     return (
         <>
-            <Typography variant="h5" gutterBottom marginTop={5}>고객 정보</Typography>
-            <Stack spacing={3} mt={4}>
-                <TextField
-                    label="이름"
-                    fullWidth
-                    value={edited.name}
-                    onChange={(e) => handleChange('name', e.target.value)}
-                    InputProps={{ disabled: !isEditing }}
-                />
-
-                <Autocomplete
-                    options={['여성', '남성']}
-                    value={edited.gender === 'F' ? '여성' : '남성'}
-                    onChange={(_, value) =>
-                        handleChange('gender', value === '여성' ? 'F' : 'M')
-                    }
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="성별"
-                            fullWidth
-                            InputProps={{
-                                ...params.InputProps,
-                                disabled: !isEditing,
-                            }}
-                        />
-                    )}
-                    disableClearable
-                    disabled={!isEditing}
-                />
-
-                <TextField
-                    label="나이"
-                    type="number"
-                    fullWidth
-                    value={edited.age}
-                    onChange={(e) => handleChange('age', e.target.value)}
-                    InputProps={{ disabled: !isEditing }}
-                />
-
-                <Autocomplete
-                    options={['기혼', '미혼']}
-                    value={edited.married === 'Y' ? '기혼' : '미혼'}
-                    onChange={(_, value) =>
-                        handleChange('married', value === '기혼' ? 'Y' : 'N')
-                    }
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="결혼 여부"
-                            fullWidth
-                            InputProps={{
-                                ...params.InputProps,
-                                disabled: !isEditing,
-                            }}
-                        />
-                    )}
-                    disableClearable
-                    disabled={!isEditing}
-                />
-
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="주소"
-                            fullWidth
-                            value={edited.address}
-                            onChange={(e) => handleChange('address', e.target.value)}
-                            InputProps={{ disabled: !isEditing }}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="상세 주소"
-                            fullWidth
-                            value="-"
-                            InputProps={{ disabled: true }}
-                        />
-                    </Grid>
-                </Grid>
-
-                <TextField
-                    label="휴대폰 번호"
-                    fullWidth
-                    value={edited.phone}
-                    onChange={(e) => handleChange('phone', e.target.value)}
-                    InputProps={{ disabled: !isEditing }}
-                />
-
-                <Autocomplete
-                    options={jobOptions}
-                    value={edited.job}
-                    onChange={(_, value) => handleChange('job', value)}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="직업"
-                            fullWidth
-                            InputProps={{
-                                ...params.InputProps,
-                                disabled: !isEditing,
-                            }}
-                        />
-                    )}
-                    disableClearable
-                    disabled={!isEditing}
-                />
-
-                <Autocomplete
-                    options={incomeOptions}
-                    value={edited.income}
-                    onChange={(_, value) => handleChange('income', value)}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="소득"
-                            fullWidth
-                            InputProps={{
-                                ...params.InputProps,
-                                readOnly: !isEditing,
-                            }}
-                        />
-                    )}
-                    disableClearable
-                    disabled={!isEditing}
-                />
-
-                <TextField
-                    label="보험 가입 개수"
-                    fullWidth
-                    value={edited.insuranceCount}
-                    onChange={(e) => handleChange('insuranceCount', e.target.value)}
-                    InputProps={{ disabled: !isEditing }}
-                />
-
+            <Box display="flex" justifyContent="flex-end" mb={2}>
                 <Button
-                    color="orange"
-                    variant="contained"
-                    fullWidth
-                    size="large"
+                    variant="outlined"
                     onClick={isEditing ? handleSubmit : () => setIsEditing(true)}
                 >
                     {isEditing ? '수정 완료' : '수정하기'}
                 </Button>
-            </Stack>
+            </Box>
+
+            <Box mt={3} mb={5}>
+                <Typography variant="h5" gutterBottom>고객 정보</Typography>
+                <Stack spacing={3} mt={2}>
+                    <TextField
+                        label="이름"
+                        fullWidth
+                        value={edited.name}
+                        onChange={(e) => handleChange('name', e.target.value)}
+                        InputProps={{ disabled: !isEditing }}
+                    />
+
+                    <Autocomplete
+                        options={['여성', '남성']}
+                        value={edited.gender === 'F' ? '여성' : '남성'}
+                        onChange={(_, value) => handleChange('gender', value === '여성' ? 'F' : 'M')}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="성별"
+                                fullWidth
+                                InputProps={{ ...params.InputProps, disabled: !isEditing }}
+                            />
+                        )}
+                        disableClearable
+                        disabled={!isEditing}
+                    />
+
+                    <TextField
+                        label="나이"
+                        type="number"
+                        fullWidth
+                        value={edited.age}
+                        onChange={(e) => handleChange('age', e.target.value)}
+                        InputProps={{ disabled: !isEditing }}
+                    />
+
+                    <Autocomplete
+                        options={['기혼', '미혼']}
+                        value={edited.married === 'Y' ? '기혼' : '미혼'}
+                        onChange={(_, value) => handleChange('married', value === '기혼' ? 'Y' : 'N')}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="결혼 여부"
+                                fullWidth
+                                InputProps={{ ...params.InputProps, disabled: !isEditing }}
+                            />
+                        )}
+                        disableClearable
+                        disabled={!isEditing}
+                    />
+
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="주소"
+                                fullWidth
+                                value={edited.address}
+                                onChange={(e) => handleChange('address', e.target.value)}
+                                InputProps={{ disabled: !isEditing }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="상세 주소"
+                                fullWidth
+                                value="-"
+                                InputProps={{ disabled: true }}
+                            />
+                        </Grid>
+                    </Grid>
+
+                    <TextField
+                        label="휴대폰 번호"
+                        fullWidth
+                        value={edited.phone}
+                        onChange={(e) => handleChange('phone', e.target.value)}
+                        InputProps={{ disabled: !isEditing }}
+                    />
+
+                    <Autocomplete
+                        options={jobOptions}
+                        value={edited.job}
+                        onChange={(_, value) => handleChange('job', value)}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="직업"
+                                fullWidth
+                                InputProps={{ ...params.InputProps, disabled: !isEditing }}
+                            />
+                        )}
+                        disableClearable
+                        disabled={!isEditing}
+                    />
+
+                    <Autocomplete
+                        options={incomeOptions}
+                        value={edited.income}
+                        onChange={(_, value) => handleChange('income', value)}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="소득"
+                                fullWidth
+                                InputProps={{ ...params.InputProps, readOnly: !isEditing }}
+                            />
+                        )}
+                        disableClearable
+                        disabled={!isEditing}
+                    />
+
+                    <TextField
+                        label="보험 가입 개수"
+                        fullWidth
+                        value={edited.insuranceCount}
+                        onChange={(e) => handleChange('insuranceCount', e.target.value)}
+                        InputProps={{ disabled: !isEditing }}
+                    />
+
+                    <Button
+                        variant="contained"
+                        color="orange"
+                        fullWidth
+                        size="large"
+                        onClick={() => navigate('/upload')}
+                    >
+                        다음
+                    </Button>
+                </Stack>
+            </Box>
         </>
     );
 }
 
-// ✅ 메인 컴포넌트
 function ExistingForm() {
     const [name, setName] = useState('');
     const [phoneSuffix, setPhoneSuffix] = useState('');
