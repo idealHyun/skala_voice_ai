@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const genderOptions = ['여성', '남성'];
 const jobOptions = ['공무원', '교사', '대학생', '대학원생', '자영업자', '주부', '프리랜서', '회사원', '기타'];
@@ -33,12 +34,33 @@ export default function NewForm() {
         setForm((prev) => ({ ...prev, [key]: value }));
     };
 
-    const handleSubmit = () => {
-        const existing = JSON.parse(localStorage.getItem('members') || '[]');
-        const updated = [...existing, form];
-        localStorage.setItem('members', JSON.stringify(updated));
+    const handleSubmit = async () => {
+        const payload = {
+            name: form.name,
+            gender: form.gender === '남성' ? 'M' : 'F',
+            age: Number(form.age),
+            married: form.married === '기혼' ? 'Y' : 'N',
+            address: form.address,
+            address_detail: form.addressDetail,
+            phone: form.phone,
+            occupation: form.job,
+            income_range: form.income,
+            insurance_count: Number(form.insuranceCount) || 0,
+        };
 
-        navigate('/success'); 
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/customers`, payload);
+            console.log('서버 응답:', res.data);
+
+            const existing = JSON.parse(localStorage.getItem('members') || '[]');
+            const updated = [...existing, form];
+            localStorage.setItem('members', JSON.stringify(updated));
+
+            navigate('/success');
+        } catch (error) {
+            console.error('제출 실패:', error);
+            alert('제출 중 오류가 발생했습니다.');
+        }
     };
 
     return (
