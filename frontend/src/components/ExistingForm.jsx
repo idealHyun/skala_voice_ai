@@ -22,23 +22,9 @@ function CustomerDisplayForm({ customer, onUpdate }) {
         setEdited((prev) => ({ ...prev, [key]: value }));
     };
 
-    const handleSubmit = () => {
-        setIsEditing(false);
-        onUpdate(edited);
-    };
-
     return (
         <>
-            <Box display="flex" justifyContent="flex-end" mb={2}>
-                <Button
-                    variant="outlined"
-                    onClick={isEditing ? handleSubmit : () => setIsEditing(true)}
-                >
-                    {isEditing ? '수정 완료' : '수정하기'}
-                </Button>
-            </Box>
-
-            <Box mt={3} mb={5}>
+            <Box mt={5} mb={5}>
                 <Typography variant="h5" gutterBottom>고객 정보</Typography>
                 <Stack spacing={3} mt={2}>
                     <TextField
