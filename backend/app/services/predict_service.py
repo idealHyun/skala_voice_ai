@@ -6,7 +6,7 @@ from pathlib import Path
 # 모델 및 인코더 파일 경로
 MODEL_PATH = Path("model/gradient_boosting_model.pkl")
 LABEL_ENCODER_PATH = Path("model/label_encoder.pkl")
-CATEGORY_ENCODERS_PATH = Path("model/category_encoders.pkl")
+CATEGORY_ENCODERS_PATH = Path("model/input_encoders.pkl")
 
 # 모델과 인코더 불러오기
 with open(MODEL_PATH, "rb") as f:
