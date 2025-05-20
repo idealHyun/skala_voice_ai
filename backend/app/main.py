@@ -6,7 +6,7 @@ from app.routers.tts_router import router as tts_router
 from app.routers.stt_tts_router import router as stt_tts_router
 from app.routers.recommend_router import router as recommend_router
 from app.routers.customers_router import router as customers_router
-from app.routers.stt_tts_router import router as predict_router
+from app.routers.predict_router import router as predict_router
 from app.routers.analyze_router import router as analyze_router
 from dotenv import load_dotenv
 import os

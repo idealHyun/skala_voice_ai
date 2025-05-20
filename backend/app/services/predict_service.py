@@ -16,7 +16,7 @@ with open(LABEL_ENCODER_PATH, "rb") as f:
     label_encoder = pickle.load(f)
 
 with open(CATEGORY_ENCODERS_PATH, "rb") as f:
-    category_encoders = pickle.load(f)  # dict 형태: {"성별": LabelEncoder, ...}
+    category_encoders = pickle.load(f)
 
 def predict_insurance(input_data: dict) -> list:
     try:
