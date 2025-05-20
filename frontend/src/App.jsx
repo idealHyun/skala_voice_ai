@@ -4,6 +4,8 @@ import { Container, Typography } from '@mui/material';
 import Home from './components/Home';
 import Success from './components/Success';
 import Upload from './components/Upload';
+import Loading from './components/Loading'
+import Result from './components/Result';
 import logo from './logo.png';
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/success" element={<Success />} />
         <Route path="/upload" element={<Upload />} />
+        <Route path="/loading" element={<Loading />} />
+        <Route path="/result" element={<Result />} />
       </Routes>
     </Container>
   );
