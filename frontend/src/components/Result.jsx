@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     Typography,
@@ -29,14 +29,37 @@ const mockResult = [
 ];
 
 export default function Result() {
-    return (
-        <Box mt={5} px={4}>
+    const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/analyze`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          conversation:
+            '상담원: 안녕하세요, OOO보험 상담사입니다  어떤 보험 상담 원하시나요?\n고객: 건강보험 쪽으로 알아보고 있어요\n상담원: 네, 병원비 보장 중심으로 보실까요?\n고객: 네, 입원이나 수술비 보장되는 게 좋겠어요\n상담원: 그럼 OOO 건강보험을 추천드립니다  입원 시 하루 5만 원, 수술 시 최대 500만 원까지 보장됩니다\n고객: 보험료는요?\n상담원: 고객님 기존 월 4만 원대이고 20년 납입 후 평생 보장입니다\n고객: 설기안 받아볼 수 있을까요?\n상담원: 네, 성함과 생년월을 알려주시면 맞춤 설기안 보내드리겠습니다\n고객: 네, 알겠습니다 감사합니다\n상담원: 감사합니다 좋은 하루 되세요',
+        }),
+      });
+
+      const json = await res.json();
+      console.log(json);
+      setData(json);
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <Box mt={5} px={4}>
             <Typography
                 variant="h5"
                 gutterBottom
                 sx={{
                     color: 'white',
-                    backgroundColor: '#f36f21', 
+                    backgroundColor: '#f36f21',
                     padding: '0.5rem 1rem',
                     borderRadius: 1,
                     display: 'inline-block',

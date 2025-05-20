@@ -16,7 +16,7 @@ class AnalyzeResponse(BaseModel):
     keywords: str
     embedding: List[float]
 
-@router.post("/analyze", response_model=AnalyzeResponse)
+@router.post("/", response_model=AnalyzeResponse)
 async def analyze(request: AnalyzeRequest):
     try:
         # 🟡 문자열 기반 분석 함수 호출

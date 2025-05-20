@@ -7,6 +7,7 @@ from app.routers.stt_tts_router import router as stt_tts_router
 from app.routers.recommendation_router import router as recommendation_router
 from app.routers.customers_router import router as customers_router
 from app.routers.stt_tts_router import router as predict_router
+from app.routers.analyze_router import router as analyze_router
 from dotenv import load_dotenv
 import os
 
@@ -33,6 +34,7 @@ app.include_router(stt_tts_router, prefix="/stt-tts")
 app.include_router(recommendation_router, prefix="/recommendation")
 app.include_router(customers_router, prefix="/customers")
 app.include_router(predict_router, prefix="/predict")
+app.include_router(analyze_router, prefix="/analyze")
 
 @app.get("/hello")
 def read_hello():
